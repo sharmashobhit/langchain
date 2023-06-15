@@ -284,7 +284,7 @@ class Qdrant(VectorStore):
             with_payload=True,
             with_vectors=False,  # Langchain does not expect vectors to be returned
             score_threshold=score_threshold,
-            consistency=consistency,
+            # consistency=consistency,
             **kwargs,
         )
         return [
