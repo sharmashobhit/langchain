@@ -61,6 +61,7 @@ class Qdrant(VectorStore):
         content_payload_key: str = CONTENT_KEY,
         metadata_payload_key: str = METADATA_KEY,
         embedding_function: Optional[Callable] = None,  # deprecated
+        global_filter=None
     ):
         """Initialize with necessary components."""
         try:
@@ -94,6 +95,7 @@ class Qdrant(VectorStore):
         self.collection_name = collection_name
         self.content_payload_key = content_payload_key or self.CONTENT_KEY
         self.metadata_payload_key = metadata_payload_key or self.METADATA_KEY
+        self.global_filter = global_filter
 
         if embedding_function is not None:
             warnings.warn(
@@ -271,7 +273,7 @@ class Qdrant(VectorStore):
             )
             qdrant_filter = self._qdrant_filter_from_dict(filter)
         else:
-            qdrant_filter = filter
+            qdrant_filter = filter or self.global_filter
         results = self.client.search(
             collection_name=self.collection_name,
             query_vector=self._embed_query(query),
